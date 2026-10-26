@@ -22,6 +22,7 @@ def get_api_chat_response_message(model, messages):
 
 
 model = "gpt-6-luna"
+########################################
 
 plot_description = """In the heart of the bustling metropolis of Astoria, the old Henderson House stands as a
 silent sentinel, its imposing facade a stark contrast to the modern skyscrapers that
@@ -56,7 +57,7 @@ Write this as one paragraph.
 """
 
 #regular messages, below is the book review messages.
-messages = [
+book_summary_messages = [
         {
             "role": "system",
             "content": "You are a helpful assistant."
@@ -67,9 +68,10 @@ messages = [
         }
     ]
 
+#book summary api call
+book_summary = get_api_chat_response_message(model, book_summary_messages)
 
-book_summary = get_api_chat_response_message(model, messages)
-
+########################################
 book_reviews = {
     """I read The Forgotten House and found it to be average. The writing was decent, and the
 plot was somewhat engaging, but it didn't leave a lasting impression on me.""",
@@ -133,8 +135,37 @@ for review in book_reviews:
         "review": review,
         "sentiment": sentiment,
     })
-    
+
+######################################## Really don't know what I'm doing wrong here.
+
+positive_book_reviews = []
+
+#brws is an array
+#each review is a dictionary
+#traversing it means: 
+for review in book_reviews_with_sentiments:    
+    if review["sentiment"] == "positive":
+        positive_book_reviews.append(review["review"])
+
+email_prompt = f"""Please write a book release announcement email using the plot description below, in between < and >, in no more than 200 words.
+<{plot_description}>."""
+
+email_announcement_messages = [
+    {
+        "role": "system",
+        "content": "You are a helpful assistant."
+    },
+    {
+        "role": "user",
+        "contnent": email_prompt 
+    }
+]
+
+promotional_email = get_api_chat_response_message(model, email_announcement_messages)
+
+
 
 #printing both of them
-print("\n" + book_summary + "\n")
-print(book_reviews_with_sentiments)
+#print("\n" + book_summary + "\n")
+#print(book_reviews_with_sentiments)
+print(promotional_email)
