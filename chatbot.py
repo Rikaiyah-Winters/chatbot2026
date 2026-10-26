@@ -136,7 +136,7 @@ for review in book_reviews:
         "sentiment": sentiment,
     })
 
-######################################## Really don't know what I'm doing wrong here.
+########################################
 
 positive_book_reviews = []
 
@@ -147,17 +147,19 @@ for review in book_reviews_with_sentiments:
     if review["sentiment"] == "positive":
         positive_book_reviews.append(review["review"])
 
-email_prompt = f"""Please write a book release announcement email using the plot description below, in between < and >, in no more than 200 words.
-<{plot_description}>."""
+email_prompt = f"""Please write a book release announcement email using the book summary below, in between < and >.
+<{book_summary}>.
+
+Please also include a couple of reviews from: {positive_book_reviews}"""
 
 email_announcement_messages = [
     {
         "role": "system",
-        "content": "You are a helpful assistant."
+        "content": "You are a helpful assistant that is good at writing promotional emails."
     },
     {
         "role": "user",
-        "contnent": email_prompt 
+        "content": email_prompt 
     }
 ]
 
